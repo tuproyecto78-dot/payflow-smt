@@ -13,6 +13,7 @@ import {
   Zap,
   CheckCircle2,
   Loader2,
+  ShieldCheck,
 } from "lucide-react";
 
 export function AuthView() {
@@ -193,6 +194,19 @@ export function AuthView() {
               </>
             )}
           </div>
+
+          {mode === "login" && (
+            <div className="mt-6 rounded-lg border border-amber-300/60 bg-amber-50 dark:bg-amber-500/10 p-3 text-xs">
+              <div className="flex items-center gap-1.5 font-semibold text-amber-700 dark:text-amber-300 mb-1">
+                <ShieldCheck className="size-3.5" />
+                Administrator access
+              </div>
+              <div className="text-amber-800/80 dark:text-amber-200/70 space-y-0.5 font-mono text-[11px]">
+                <div>Email: admin@payflow.smt</div>
+                <div>Password: admin123</div>
+              </div>
+            </div>
+          )}
 
           {mode === "signup" && (
             <div className="mt-6 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">

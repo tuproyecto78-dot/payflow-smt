@@ -10,6 +10,7 @@ import {
   History,
   LogOut,
   ChevronRight,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,7 @@ interface SidebarProps {
 export function Sidebar({ activeNav, onNavigate }: SidebarProps) {
   const { user, logout } = useAuthStore();
   const { activeWorkflow, goDashboard } = useAppStore();
+  const isAdmin = user?.role === "admin";
 
   const initials = (user?.name || user?.email || "U")
     .split(/[\s@.]+/)
@@ -85,13 +87,26 @@ export function Sidebar({ activeNav, onNavigate }: SidebarProps) {
       <div className="border-t border-sidebar-border p-2 lg:p-3">
         <div className="flex items-center gap-2.5 px-1 lg:px-2 py-1.5">
           <Avatar className="size-8 border border-sidebar-border">
-            <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
+            <AvatarFallback
+              className={cn(
+                "text-xs font-semibold",
+                isAdmin
+                  ? "bg-amber-500/25 text-amber-300"
+                  : "bg-primary/20 text-primary"
+              )}
+            >
               {initials || "U"}
             </AvatarFallback>
           </Avatar>
           <div className="hidden lg:block flex-1 min-w-0">
-            <div className="text-sm font-medium truncate">
+            <div className="text-sm font-medium truncate flex items-center gap-1.5">
               {user?.name || "User"}
+              {isAdmin && (
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-semibold text-amber-300 leading-none">
+                  <ShieldCheck className="size-2.5" />
+                  ADMIN
+                </span>
+              )}
             </div>
             <div className="text-xs text-sidebar-foreground/50 truncate">
               {user?.email}

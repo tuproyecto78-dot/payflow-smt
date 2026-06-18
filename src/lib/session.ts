@@ -12,6 +12,7 @@ export interface SessionPayload {
   userId: string;
   email: string;
   name?: string | null;
+  role: string; // "user" | "admin"
 }
 
 export async function createSessionToken(payload: SessionPayload): Promise<string> {
@@ -29,6 +30,7 @@ export async function verifySessionToken(token: string): Promise<SessionPayload 
       userId: payload.userId as string,
       email: payload.email as string,
       name: (payload.name as string) ?? null,
+      role: (payload.role as string) || "user",
     };
   } catch {
     return null;
