@@ -24,6 +24,7 @@ import { useAppStore, type WorkflowSummary } from "@/stores/app-store";
 import { NodePalette } from "./node-palette";
 import { ConfigPanel, type SelectedNode } from "./config-panel";
 import { WhatsAppSimulator } from "./whatsapp-simulator";
+import { FloatingPanel } from "./floating-panel";
 import { ExecutionLog } from "./execution-log";
 import { PayFlowNode } from "./nodes/payflow-node";
 import {
@@ -54,12 +55,6 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ArrowLeft,
@@ -700,17 +695,17 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
         running={running}
       />
 
-      {/* Panel del simulador (móvil) */}
-      <Sheet open={simOpen} onOpenChange={setSimOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col">
-          <SheetHeader className="px-4 py-3 border-b border-border">
-            <SheetTitle className="text-sm">Simulador de WhatsApp</SheetTitle>
-          </SheetHeader>
-          <div className="flex-1 p-3 overflow-hidden min-h-0">
-            <WhatsAppSimulator messages={visibleMessages} running={running} />
-          </div>
-        </SheetContent>
-      </Sheet>
+      {/* Panel del simulador (iPhone flotante arrastrable) */}
+      <FloatingPanel
+        open={simOpen}
+        onClose={() => setSimOpen(false)}
+        title="Simulador de WhatsApp — arrastra para mover"
+        initialPosition={{ x: 160, y: 100 }}
+      >
+        <div className="w-[300px] h-[600px]">
+          <WhatsAppSimulator messages={visibleMessages} running={running} />
+        </div>
+      </FloatingPanel>
     </div>
   );
 }
