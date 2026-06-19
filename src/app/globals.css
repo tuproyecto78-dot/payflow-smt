@@ -166,6 +166,10 @@
 }
 
 /* Custom scrollbar */
+.pf-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.75 0.015 155) transparent;
+}
 .pf-scroll::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -174,17 +178,25 @@
   background: transparent;
 }
 .pf-scroll::-webkit-scrollbar-thumb {
-  background: oklch(0.85 0.01 155);
+  background: oklch(0.78 0.012 155);
   border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 .pf-scroll::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.75 0.015 155);
+  background: oklch(0.62 0.015 155);
+  background-clip: content-box;
+}
+.dark .pf-scroll {
+  scrollbar-color: oklch(0.45 0.01 155) transparent;
 }
 .dark .pf-scroll::-webkit-scrollbar-thumb {
-  background: oklch(0.4 0.01 155);
+  background: oklch(0.45 0.01 155);
+  background-clip: content-box;
 }
 .dark .pf-scroll::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.5 0.015 155);
+  background: oklch(0.55 0.015 155);
+  background-clip: content-box;
 }
 
 /* Animated dashed edges while running */
