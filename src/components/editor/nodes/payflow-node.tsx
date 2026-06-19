@@ -89,15 +89,16 @@ function getNodeSummary(type: NodeType, data: PayFlowNodeData): string {
   }
 }
 
-function PayFlowNodeInner({ id, type, data, selected }: NodeProps) {
-  const meta = NODE_METADATA[type as NodeType];
+function PayFlowNodeInner({ id, data, selected }: NodeProps) {
+  const nodeType = (data as { nodeType?: NodeType }).nodeType || "message";
+  const meta = NODE_METADATA[nodeType];
   const Icon = ICONS[meta?.icon] || Square;
   const nodeData = data as PayFlowNodeData;
   const isRunning = (data as { __running?: boolean }).__running;
   const isDone = (data as { __done?: boolean }).__done;
   const isError = (data as { __error?: boolean }).__error;
 
-  const showTarget = type !== "start";
+  const showTarget = nodeType !== "start";
   const outputs = meta?.outputs || [];
 
   function handleDelete(e: React.MouseEvent) {
@@ -131,7 +132,7 @@ function PayFlowNodeInner({ id, type, data, selected }: NodeProps) {
       )}
 
       {/* Botón eliminar (X) — visible al seleccionar o al pasar el cursor */}
-      {type !== "start" && (
+      {nodeType !== "start" && (
         <button
           onClick={handleDelete}
           title="Eliminar nodo"
@@ -170,7 +171,7 @@ function PayFlowNodeInner({ id, type, data, selected }: NodeProps) {
 
       {/* Cuerpo */}
       <div className="px-3 py-2 text-xs text-muted-foreground border-t border-border/60">
-        <p className="truncate">{getNodeSummary(type as NodeType, nodeData)}</p>
+        <p className="truncate">{getNodeSummary(nodeType, nodeData)}</p>
       </div>
 
       {/* Conectores de salida */}
@@ -180,13 +181,16 @@ function PayFlowNodeInner({ id, type, data, selected }: NodeProps) {
             ? "50%"
             : `${(idx + 1) * (100 / (outputs.length + 1))}%`;
         return (
-          <div
-            key={out.id}
-            className="absolute right-0 flex items-center"
-            style={{ top, transform: "translateY(-50%)" }}
-          >
+          <div key={out.id}>
             {outputs.length > 1 && (
-              <span className="text-[9px] font-medium text-muted-foreground mr-0.5 whitespace-nowrap bg-card px-1 rounded">
+              <span
+                className="absolute text-[9px] font-medium text-muted-foreground whitespace-nowrap bg-card px-1 rounded pointer-events-none"
+                style={{
+                  top,
+                  right: 14,
+                  transform: "translateY(-50%)",
+                }}
+              >
                 {out.label}
               </span>
             )}
@@ -199,10 +203,7 @@ function PayFlowNodeInner({ id, type, data, selected }: NodeProps) {
                 width: 11,
                 height: 11,
                 backgroundColor: meta?.color,
-                position: "relative",
-                transform: "none",
-                left: "auto",
-                top: "auto",
+                top,
               }}
               isConnectable
             />

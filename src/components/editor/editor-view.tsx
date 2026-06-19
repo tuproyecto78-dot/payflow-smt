@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
+  ConnectionMode,
   Controls,
   MiniMap,
   ReactFlowProvider,
@@ -598,7 +599,7 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
               type: "smoothstep",
               style: { stroke: "#94a3b8", strokeWidth: 2 },
             }}
-            connectionLineType={"smoothstep" as never}
+            connectionMode={ConnectionMode.Loose}
             deleteKeyCode={["Backspace", "Delete"]}
             proOptions={{ hideAttribution: true }}
             className="bg-background"
