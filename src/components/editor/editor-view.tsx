@@ -125,6 +125,11 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
   const [running, setRunning] = useState(false);
   const [runOpen, setRunOpen] = useState(false);
   const [simOpen, setSimOpen] = useState(false);
+  const [simKey, setSimKey] = useState(0);
+  const openSim = useCallback(() => {
+    setSimKey((k) => k + 1);
+    setSimOpen(true);
+  }, []);
   const [tplOpen, setTplOpen] = useState(false);
   const [result, setResult] = useState<RunResult | null>(null);
   const [visibleEntries, setVisibleEntries] = useState<LogEntry[]>([]);
@@ -457,6 +462,7 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
       await replay(r);
       setResult(r);
       setSimOpen(true);
+      setSimKey((k) => k + 1);
       if (r.status === "success") {
         toast.success("Flujo completado");
       } else if (r.status === "failed") {
@@ -540,7 +546,7 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setSimOpen(true)}
+          onClick={openSim}
           className="hidden md:inline-flex"
         >
           <Smartphone className="size-4 mr-1.5" />
@@ -623,7 +629,7 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => setSimOpen(true)}
+              onClick={openSim}
               className="shadow-lg"
             >
               <Smartphone className="size-4 mr-1.5" />
@@ -697,9 +703,10 @@ function EditorInner({ workflow }: { workflow: WorkflowSummary }) {
 
       {/* Panel del simulador (iPhone flotante arrastrable) */}
       <FloatingPanel
+        key={simKey}
         open={simOpen}
         onClose={() => setSimOpen(false)}
-        title="Simulador de WhatsApp — arrastra para mover"
+        title="Simulador de WhatsApp"
         initialPosition={{ x: 160, y: 100 }}
       >
         <div className="w-[300px] h-[600px]">

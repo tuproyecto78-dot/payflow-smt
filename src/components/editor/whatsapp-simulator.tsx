@@ -49,11 +49,11 @@ export function WhatsAppSimulator({
   const now = format(new Date(), "HH:mm");
 
   return (
-    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-900 p-2">
-      {/* Marco del iPhone */}
+    <div className="w-full h-full flex items-center justify-center">
+      {/* Marco del iPhone — sin contenedor gris, solo el móvil */}
       <div
         className={cn(
-          "relative bg-black rounded-[2.5rem] shadow-2xl border-[3px] border-slate-800 dark:border-slate-700",
+          "relative bg-black rounded-[2.8rem] shadow-2xl border-[2px] border-slate-700",
           compact ? "w-[260px] h-[520px]" : "w-[300px] h-[600px]"
         )}
       >
@@ -102,6 +102,7 @@ export function WhatsAppSimulator({
           {/* Área de mensajes (chat de WhatsApp) */}
           <div
             ref={scrollRef}
+            data-no-drag
             className="absolute top-[68px] bottom-10 left-0 right-0 overflow-y-auto pf-scroll px-2 py-2 space-y-1"
             style={{
               backgroundColor: "#e5ddd5",
