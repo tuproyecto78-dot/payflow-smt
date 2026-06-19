@@ -54,19 +54,19 @@ export function WhatsAppSimulator({
       <div
         className={cn(
           "relative bg-black rounded-[2.8rem] shadow-2xl border-[2px] border-slate-700",
-          compact ? "w-[260px] h-[520px]" : "w-[300px] h-[600px]"
+          compact ? "w-[200px] h-[400px]" : "w-[230px] h-[460px]"
         )}
       >
         {/* Botones laterales físicos */}
+        <div className="absolute -left-[3px] top-16 w-[3px] h-6 bg-slate-700 rounded-l" />
         <div className="absolute -left-[3px] top-24 w-[3px] h-8 bg-slate-700 rounded-l" />
-        <div className="absolute -left-[3px] top-36 w-[3px] h-12 bg-slate-700 rounded-l" />
-        <div className="absolute -left-[3px] top-52 w-[3px] h-12 bg-slate-700 rounded-l" />
-        <div className="absolute -right-[3px] top-40 w-[3px] h-16 bg-slate-700 rounded-r" />
+        <div className="absolute -left-[3px] top-36 w-[3px] h-8 bg-slate-700 rounded-l" />
+        <div className="absolute -right-[3px] top-28 w-[3px] h-10 bg-slate-700 rounded-r" />
 
         {/* Pantalla */}
         <div className="relative w-full h-full rounded-[2.2rem] overflow-hidden bg-[#e5ddd5]">
           {/* Notch / Dynamic Island */}
-          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-24 h-5 bg-black rounded-full z-30" />
+          <div className="absolute top-1 left-1/2 -translate-x-1/2 w-18 h-4 bg-black rounded-full z-30" style={{width:'4.5rem'}} />
 
           {/* Barra de estado del iPhone */}
           <div className="absolute top-0 left-0 right-0 h-7 z-20 flex items-center justify-between px-6 pt-1 text-[10px] font-semibold text-black bg-[#075e54]">
@@ -152,7 +152,7 @@ export function WhatsAppSimulator({
           </div>
 
           {/* Barra de entrada de mensaje */}
-          <div className="absolute bottom-0 left-0 right-0 h-10 z-20 bg-[#f0f0f0] flex items-center gap-1.5 px-2 py-1">
+          <div className="absolute bottom-0 left-0 right-0 h-8 z-20 bg-[#f0f0f0] flex items-center gap-1 px-1.5 py-1">
             <div className="flex-1 bg-white rounded-full px-3 py-1.5 flex items-center gap-2">
               <Smile className="size-4 text-gray-500 shrink-0" />
               <span className="text-[10px] text-gray-400 flex-1">
@@ -175,7 +175,7 @@ export function WhatsAppSimulator({
           )}
 
           {/* Home indicator del iPhone */}
-          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-24 h-1 bg-black/30 rounded-full z-30" />
+          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-16 h-1 bg-black/30 rounded-full z-30" />
         </div>
       </div>
     </div>

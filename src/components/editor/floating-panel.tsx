@@ -9,13 +9,17 @@ interface FloatingPanelProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
-  initialPosition?: { x: number; y: number };
+  /** Posición controlada (se mantiene al cerrar/reabrir). */
+  position: { x: number; y: number };
+  /** Se llama al terminar de arrastrar con la nueva posición. */
+  onPositionChange?: (pos: { x: number; y: number }) => void;
   contentClassName?: string;
 }
 
 /**
  * Panel flotante arrastrable desde cualquier punto.
  * Renderiza SOLO el contenido (sin barra de título ni bordes cuadrados).
+ * La posición es controlada por el padre para persistir al cerrar/reabrir.
  * Un botón X flotante permite cerrarlo. Se cierra también con Escape.
  */
 export function FloatingPanel({
@@ -23,13 +27,19 @@ export function FloatingPanel({
   onClose,
   title,
   children,
-  initialPosition,
+  position,
+  onPositionChange,
   contentClassName,
 }: FloatingPanelProps) {
-  const [pos, setPos] = useState(initialPosition ?? { x: 120, y: 120 });
+  // Posición local durante el arrastre; se sincroniza con la prop al soltar.
+  const [dragPos, setDragPos] = useState(position);
   const [dragging, setDragging] = useState(false);
   const dragOffset = useRef({ x: 0, y: 0 });
   const panelRef = useRef<HTMLDivElement>(null);
+  const latestPos = useRef(position);
+  useEffect(() => {
+    latestPos.current = dragPos;
+  }, [dragPos]);
 
   useEffect(() => {
     if (!open) return;
@@ -43,13 +53,15 @@ export function FloatingPanel({
   useEffect(() => {
     if (!dragging) return;
     function onMove(e: MouseEvent) {
-      setPos({
+      setDragPos({
         x: e.clientX - dragOffset.current.x,
         y: e.clientY - dragOffset.current.y,
       });
     }
     function onUp() {
       setDragging(false);
+      // Notificar al padre la posición final para que persista.
+      onPositionChange?.(latestPos.current);
     }
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
@@ -79,6 +91,8 @@ export function FloatingPanel({
     setDragging(true);
   }
 
+  const currentPos = dragging ? dragPos : position;
+
   return (
     <div
       ref={panelRef}
@@ -89,7 +103,7 @@ export function FloatingPanel({
         "fixed z-50 select-none cursor-grab",
         dragging && "cursor-grabbing"
       )}
-      style={{ left: pos.x, top: pos.y, touchAction: "none" }}
+      style={{ left: currentPos.x, top: currentPos.y, touchAction: "none" }}
     >
       {children}
       {/* Botón de cerrar flotante (no arrastra al hacer clic) */}
@@ -101,9 +115,9 @@ export function FloatingPanel({
         onMouseDown={(e) => e.stopPropagation()}
         title="Cerrar (Esc)"
         aria-label="Cerrar simulador"
-        className="absolute -top-2 -right-2 size-7 rounded-full bg-red-500 text-white shadow-lg flex items-center justify-center hover:bg-red-600 transition-colors z-50 ring-2 ring-white/80"
+        className="absolute -top-2 -right-2 size-6 rounded-full bg-red-500 text-white shadow-lg flex items-center justify-center hover:bg-red-600 transition-colors z-50 ring-2 ring-white/80"
       >
-        <X className="size-4" />
+        <X className="size-3.5" />
       </button>
     </div>
   );
