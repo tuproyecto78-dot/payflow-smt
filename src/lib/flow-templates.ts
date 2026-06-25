@@ -5,13 +5,18 @@
 import type { FlowNode, FlowEdge } from "@/lib/workflow-types";
 
 export type FlowTemplateId =
+  | "solo_ia"
+  | "ia_agenda"
+  | "ia_catalogo"
+  | "ia_payphone"
+  | "ia_agenda_payphone"
+  | "agente_completo"
+  // Legacy IDs (still work, mapped to new ones)
   | "venta"
   | "cobro"
   | "agenda"
   | "venta_cobro"
-  | "agenda_cobro"
-  | "agente_completo"
-  | "solo_ia"; // New: no payment, just IA + notification
+  | "agenda_cobro";
 
 export interface FlowTemplateParams {
   templateId: FlowTemplateId;
@@ -41,13 +46,12 @@ export const FLOW_TEMPLATES: Array<{
   name: string;
   description: string;
 }> = [
-  { id: "venta", name: "Venta por WhatsApp", description: "Agente que vende productos y responde preguntas." },
-  { id: "cobro", name: "Cobro por WhatsApp", description: "Agente que cobra con PayPhone API Link." },
-  { id: "agenda", name: "Agenda de citas", description: "Agente que agenda citas automáticamente." },
-  { id: "venta_cobro", name: "Venta + cobro", description: "Vende y cobra con PayPhone en un solo flujo." },
-  { id: "agenda_cobro", name: "Agenda + cobro", description: "Agenda cita y cobra depósito con PayPhone." },
-  { id: "agente_completo", name: "Agente comercial completo", description: "Vende, cobra, agenda y deriva a humano." },
-  { id: "solo_ia", name: "Solo IA (sin pagos)", description: "Agente que responde, agenda y notifica sin cobros." },
+  { id: "solo_ia", name: "1. Solo IA (sin pagos)", description: "WhatsApp + Agente IA + respuesta + humano. Sin PayPhone." },
+  { id: "ia_agenda", name: "2. IA + Agenda", description: "WhatsApp + Agente IA + agenda de citas. Sin pagos." },
+  { id: "ia_catalogo", name: "3. IA + Catálogo", description: "WhatsApp + Agente IA + búsqueda de productos. Sin pagos." },
+  { id: "ia_payphone", name: "4. IA + PayPhone", description: "WhatsApp + Agente IA + Crear pago PayPhone API Link." },
+  { id: "ia_agenda_payphone", name: "5. IA + Agenda + PayPhone", description: "WhatsApp + Agente IA + agenda + cobro con PayPhone." },
+  { id: "agente_completo", name: "6. Agente comercial completo", description: "Responde, vende, agenda, cobra y deriva a humano." },
 ];
 
 let _counter = 0;
@@ -295,13 +299,19 @@ function generateAgenteCompleto(params: FlowTemplateParams): GeneratedFlow {
 export function generateFlowFromTemplate(params: FlowTemplateParams): GeneratedFlow {
   _counter = 0;
   switch (params.templateId) {
+    // New template IDs
+    case "solo_ia": return generateSoloIA(params);
+    case "ia_agenda": return generateAgenda({ ...params, payment_required: false, payment_provider: "none" });
+    case "ia_catalogo": return generateSoloIA({ ...params, agent_mode: "vender" });
+    case "ia_payphone": return generateVenta({ ...params, payment_required: true, payment_provider: "payphone" });
+    case "ia_agenda_payphone": return generateAgendaCobro({ ...params, payment_required: true, payment_provider: "payphone" });
+    case "agente_completo": return generateAgenteCompleto(params);
+    // Legacy IDs (still work)
     case "venta": return generateVenta(params);
     case "cobro": return generateCobro(params);
     case "agenda": return generateAgenda(params);
     case "venta_cobro": return generateVentaCobro(params);
     case "agenda_cobro": return generateAgendaCobro(params);
-    case "agente_completo": return generateAgenteCompleto(params);
-    case "solo_ia": return generateSoloIA(params);
     default: return generateSoloIA(params);
   }
 }

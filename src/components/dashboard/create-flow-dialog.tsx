@@ -9,22 +9,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Sparkles, ArrowRight, ArrowLeft, ShoppingCart, CreditCard, CalendarClock, ShoppingBag, CalendarCheck, Bot, MessageSquare } from "lucide-react";
+import { Loader2, Sparkles, ArrowRight, ArrowLeft, ShoppingCart, CreditCard, CalendarClock, CalendarCheck, Bot, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const TEMPLATES = [
-  { id: "venta", name: "Venta por WhatsApp", icon: "ShoppingCart" },
-  { id: "cobro", name: "Cobro por WhatsApp", icon: "CreditCard" },
-  { id: "agenda", name: "Agenda de citas", icon: "CalendarClock" },
-  { id: "venta_cobro", name: "Venta + cobro", icon: "ShoppingBag" },
-  { id: "agenda_cobro", name: "Agenda + cobro", icon: "CalendarCheck" },
-  { id: "agente_completo", name: "Agente comercial completo", icon: "Bot" },
-  { id: "solo_ia", name: "Solo IA (sin pagos)", icon: "MessageSquare" },
+  { id: "solo_ia", name: "Solo IA (sin pagos)", icon: "MessageSquare", desc: "WhatsApp + IA + humano" },
+  { id: "ia_agenda", name: "IA + Agenda", icon: "CalendarClock", desc: "WhatsApp + IA + citas" },
+  { id: "ia_catalogo", name: "IA + Catálogo", icon: "ShoppingCart", desc: "WhatsApp + IA + productos" },
+  { id: "ia_payphone", name: "IA + PayPhone", icon: "CreditCard", desc: "WhatsApp + IA + pago" },
+  { id: "ia_agenda_payphone", name: "IA + Agenda + PayPhone", icon: "CalendarCheck", desc: "Citas + cobro" },
+  { id: "agente_completo", name: "Agente comercial completo", icon: "Bot", desc: "Vende, cobra, agenda" },
 ] as const;
 
 const ICONS: Record<string, typeof ShoppingCart> = {
-  ShoppingCart, CreditCard, CalendarClock, ShoppingBag, CalendarCheck, Bot, MessageSquare,
+  ShoppingCart, CreditCard, CalendarClock, CalendarCheck, Bot, MessageSquare,
 };
 
 interface CreateFlowDialogProps {
@@ -116,10 +115,12 @@ export function CreateFlowDialog({ open, onOpenChange, onCreated, projectId }: C
                     key={tpl.id}
                     onClick={() => {
                       setSelectedTemplate(tpl.id);
-                      if (tpl.id === "solo_ia") {
+                      // Templates without payment
+                      if (tpl.id === "solo_ia" || tpl.id === "ia_agenda" || tpl.id === "ia_catalogo") {
                         set("payment_required", false);
                         set("payment_provider", "none");
                       } else {
+                        // Templates with PayPhone
                         set("payment_required", true);
                         set("payment_provider", "payphone");
                       }
