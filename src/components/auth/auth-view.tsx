@@ -48,7 +48,7 @@ export function AuthView() {
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-background">
       {/* Panel de marca */}
-      <div className="relative lg:w-1/2 bg-[#0a1628] text-white px-6 py-8 sm:px-8 sm:py-10 lg:p-14 flex flex-col justify-between overflow-hidden shrink-0">
+      <div className="relative lg:w-1/2 bg-[#0a1628] text-white px-6 pt-8 pb-12 sm:px-8 sm:pt-10 sm:pb-16 lg:p-14 flex flex-col justify-between overflow-hidden shrink-0">
         <div
           className="absolute inset-0 opacity-[0.07] pointer-events-none"
           style={{
@@ -105,7 +105,7 @@ export function AuthView() {
       </div>
 
       {/* Panel de formulario */}
-      <div className="lg:w-1/2 flex flex-col items-center justify-center px-4 py-8 sm:px-6 sm:py-10 lg:p-12 relative">
+      <div className="lg:w-1/2 flex flex-col items-center justify-center px-4 pt-10 pb-12 sm:px-6 sm:pt-12 sm:pb-16 lg:p-12 relative">
         {/* Enlace para volver a la landing — positioned above form on mobile, absolute on desktop */}
         <div className="w-full max-w-sm mb-6 lg:absolute lg:top-6 lg:left-6 lg:mb-0 lg:max-w-none">
           <button
@@ -118,18 +118,18 @@ export function AuthView() {
         </div>
 
         <div className="w-full max-w-sm">
-          <div className="mb-8 mt-2 lg:mt-0">
+          <div className="mb-8 mt-4 lg:mt-0">
             <h2 className="text-2xl font-bold tracking-tight">
               {mode === "login" ? "Bienvenido de nuevo" : "Crea tu cuenta"}
             </h2>
-            <p className="text-muted-foreground text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-2">
               {mode === "login"
                 ? "Inicia sesión para abrir tu panel de flujos."
                 : "Comienza a crear flujos de automatización en minutos."}
             </p>
           </div>
 
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-5">
             {mode === "signup" && (
               <div className="space-y-2">
                 <Label htmlFor="name">Nombre completo</Label>
